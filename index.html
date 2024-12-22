@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix the Outboard Engine!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #2c3e50;
+      color: white;
+    }
+    .game-container {
+      margin: 50px auto;
+      max-width: 600px;
+    }
+    .section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px solid white;
+      border-radius: 8px;
+    }
+    .hidden {
+      display: none;
+    }
+    .button {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #16a085;
+    }
+    #timer {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Fix the Outboard Engine!</h1>
+    <p id="timer">Time Remaining: 300 seconds</p>
+
+    <!-- Section 1: Fix the Cable -->
+    <div id="cable-section" class="section">
+      <h2>⚡ Fix the Cable</h2>
+      <p>Click the wires in the correct order to connect them!</p>
+      <button class="button" onclick="fixCable()">Fix Cable</button>
+    </div>
+
+    <!-- Section 2: Tighten the Bolts -->
+    <div id="bolt-section" class="section hidden">
+      <h2>🔩 Tighten the Bolts</h2>
+      <p>Tighten the bolts in the order: 3 → 1 → 2.</p>
+      <button class="button" onclick="tightenBolts()">Tighten Bolts</button>
+    </div>
+
+    <!-- Section 3: Repair the Fuel Tank -->
+    <div id="fuel-section" class="section hidden">
+      <h2>⛽ Repair the Fuel Tank</h2>
+      <p>Mix fuel components correctly (3 parts A, 2 parts B).</p>
+      <button class="button" onclick="repairFuel()">Mix Fuel</button>
+    </div>
+
+    <!-- Success or Failure -->
+    <div id="result-section" class="section hidden">
+      <h2 id="result-title"></h2>
+      <p id="result-message"></p>
+    </div>
+  </div>
+
+  <script>
+    let timeLeft = 300; // 5 minutes in seconds
+    const timerElement = document.getElementById("timer");
+    const sections = ["cable-section", "bolt-section", "fuel-section"];
+    let currentSection = 0;
+
+    // Countdown Timer
+    const timer = setInterval(() => {
+      timeLeft--;
+      timerElement.textContent = `Time Remaining: ${timeLeft} seconds`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        endGame(false);
+      }
+    }, 1000);
+
+    // Fix Cable Logic
+    function fixCable() {
+      alert("Cable fixed!");
+      nextSection();
+    }
+
+    // Tighten Bolts Logic
+    function tightenBolts() {
+      alert("Bolts tightened in correct order!");
+      nextSection();
+    }
+
+    // Repair Fuel Logic
+    function repairFuel() {
+      alert("Fuel tank repaired with correct mix!");
+      endGame(true);
+    }
+
+    // Move to the next section
+    function nextSection() {
+      document.getElementById(sections[currentSection]).classList.add("hidden");
+      currentSection++;
+      if (currentSection < sections.length) {
+        document.getElementById(sections[currentSection]).classList.remove("hidden");
+      }
+    }
+
+    // End the game
+    function endGame(success) {
+      clearInterval(timer);
+      document.querySelectorAll(".section").forEach(sec => sec.classList.add("hidden"));
+      const resultSection = document.getElementById("result-section");
+      resultSection.classList.remove("hidden");
+      const resultTitle = document.getElementById("result-title");
+      const resultMessage = document.getElementById("result-message");
+      if (success) {
+        resultTitle.textContent = "You Escaped!";
+        resultMessage.textContent = "Congratulations! You repaired the engine and escaped from Jason!";
+      } else {
+        resultTitle.textContent = "Game Over";
+        resultMessage.textContent = "Jason caught you because you ran out of time!";
+      }
+    }
+  </script>
+</body>
+</html>
